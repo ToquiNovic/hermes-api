@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { BACKEND_PORT } from './config/index.js';
 import routes from './routes/index.js';
-import { sequelize } from './database.js'; // Importa sequelize correctamente
+import { sequelize } from './database.js';
 
 const port = BACKEND_PORT || 3000;
 const app = express();
@@ -17,16 +17,16 @@ app.use(cors());
 // database initialization
 async function initializeDatabase() {
   try {
-    await sequelize.authenticate(); // Verifica la conexión a la base de datos
+    await sequelize.authenticate();
     console.log('Database connected successfully.');
-    await sequelize.sync({ alter: true }); // Usa { force: true } para reiniciar la BD (cuidado en producción)
+    await sequelize.sync({ alter: true });
     console.log('Database synced.');
   } catch (error) {
     console.error('Database connection error:', error);
   }
 }
 
-initializeDatabase(); // Llama a la función para inicializar la BD
+initializeDatabase(); 
 
 // routes
 app.get('/', (req, res) => {
