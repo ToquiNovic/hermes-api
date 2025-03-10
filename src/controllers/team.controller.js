@@ -1,29 +1,41 @@
 import { models } from "../database.js";
 import { generateInviteCode } from "../utils/generateCode.js";
 import { generateToken } from "../utils/token.js";
+import { AUX_URL } from "../config/index.js";
 
 export const postCreateTeam = async (req, res) => {
   try {
-    const { name, urlImage, AdminTeamId } = req.body;
+    const { id, name, extensionFile, AdminTeamId } = req.body;
 
-    if (!name || !urlImage || !AdminTeamId) {
+    if (!id || !name || !AdminTeamId) {
       return res.status(400).json({
         success: false,
         message: "Todos los campos son obligatorios.",
       });
     }
 
-    const inviteCode = generateInviteCode();
+    // Verificar si ya existe un equipo con ese nombre
+    const existingTeam = await models.Team.findOne({ where: { name } });
+    if (existingTeam) {
+      return res.status(400).json({
+        success: false,
+        message: "Ya existe un equipo con ese nombre.",
+      });
+    }
 
+    const urlLogo = `${AUX_URL}/teams/${id}.${extensionFile}`;
+    const inviteCode = generateInviteCode();
     const token = generateToken();
 
     const team = await models.Team.create({
       name,
       inviteCode,
-      urlImage,
+      urlImage: urlLogo,
       AdminTeamId,
       token,
     });
+
+    await models.User.update({ teamId: team.id }, { where: { id: AdminTeamId } });
 
     res.status(201).json({
       success: true,
