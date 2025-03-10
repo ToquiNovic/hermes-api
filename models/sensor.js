@@ -16,7 +16,7 @@ export default (sequelize) => {
       },
       description: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },    
       teamId: {
         type: DataTypes.UUID,

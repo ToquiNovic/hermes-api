@@ -2,7 +2,7 @@ import { models } from "../database.js";
 
 export const postCreateSensor = async (req, res) => {
   try {
-    const { name, teamId } = req.body;
+    const { name, teamId, description } = req.body;
 
     if (!name || !teamId) {
       return res.status(400).json({
@@ -14,6 +14,7 @@ export const postCreateSensor = async (req, res) => {
     const sensor = await models.Sensor.create({
       name,
       teamId,
+      description,
     });
 
     res.status(201).json({

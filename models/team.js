@@ -14,7 +14,6 @@ export default (sequelize) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       inviteCode: {
         type: DataTypes.STRING,
@@ -28,7 +27,6 @@ export default (sequelize) => {
       token: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       AdminTeamId: {
         type: DataTypes.UUID,
