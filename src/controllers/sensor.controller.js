@@ -97,3 +97,42 @@ export const getSensorsByTeamId = async (req, res) => {
   }
 };
 
+export const deleteSensorById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "El ID del sensor es requerido.",
+      });
+    }
+
+    const sensor = await models.Sensor.findByPk(id);
+
+    if (!sensor) {
+      return res.status(404).json({
+        success: false,
+        message: "Sensor no encontrado.",
+      });
+    }
+
+    await models.SensorData.destroy({
+      where: { sensorId: id },
+    });
+
+    await sensor.destroy();
+
+    res.status(200).json({
+      success: true,
+      message: "Sensor y datos asociados eliminados exitosamente.",
+    });
+  } catch (error) {
+    console.error("Error al eliminar el sensor:", error);
+    res.status(500).json({
+      success: false,
+      message: "Hubo un error al eliminar el sensor.",
+      error: error.message,
+    });
+  }
+};
