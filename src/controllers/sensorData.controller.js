@@ -38,14 +38,20 @@ import { models } from "../database.js";
 export const getSensorData = async (req, res) => {
   try {
     const { sensorId } = req.params;
+    const { limit } = req.query;
 
-    // Buscar los datos del sensor
-    const sensorData = await models.SensorData.findAll({
+    const options = {
       where: { sensorId },
       order: [["createdAt", "DESC"]],
-    });
+    };
 
-    // Respuesta exitosa
+    if (limit && !isNaN(parseInt(limit))) {
+      options.limit = parseInt(limit);
+    }
+
+    // Buscar los datos del sensor en orden descendente por fecha
+    const sensorData = await models.SensorData.findAll(options);
+
     res.status(200).json({
       success: true,
       message: "Datos del sensor obtenidos exitosamente.",
@@ -100,8 +106,8 @@ export const postSensorData = async (req, res) => {
         value: data.value,
       },
       {
-        where: { sensorId: data.sensorId }, 
-        returning: true, 
+        where: { sensorId: data.sensorId },
+        returning: true,
       }
     );
 
