@@ -1,4 +1,5 @@
 import { models } from "../database.js";
+import { Op } from "sequelize";
 
 // export const postSensorData = async (req, res) => {
 //   try {
@@ -38,10 +39,26 @@ import { models } from "../database.js";
 export const getSensorData = async (req, res) => {
   try {
     const { sensorId } = req.params;
-    const { limit } = req.query;
+    const { limit, startDate, endDate } = req.query;
+
+    const where = { sensorId };
+
+    if (startDate || endDate) {
+      where.createdAt = {};
+
+      if (startDate) {
+        where.createdAt[Op.gte] = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setDate(end.getDate() + 1);
+        where.createdAt[Op.lt] = end;
+      }
+    }
 
     const options = {
-      where: { sensorId },
+      where,
       order: [["createdAt", "DESC"]],
     };
 
@@ -49,7 +66,6 @@ export const getSensorData = async (req, res) => {
       options.limit = parseInt(limit);
     }
 
-    // Buscar los datos del sensor en orden descendente por fecha
     const sensorData = await models.SensorData.findAll(options);
 
     res.status(200).json({
