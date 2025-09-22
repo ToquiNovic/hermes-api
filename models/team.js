@@ -18,7 +18,6 @@ export default (sequelize) => {
       inviteCode: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
       },
       urlImage: {
         type: DataTypes.STRING,
@@ -31,7 +30,6 @@ export default (sequelize) => {
       AdminTeamId: {
         type: DataTypes.UUID,
         allowNull: false,
-        unique: true,
       },
     },
     {

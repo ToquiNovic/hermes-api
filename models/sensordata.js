@@ -10,10 +10,6 @@ export default (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       value: {
         type: DataTypes.FLOAT,
         allowNull: false,

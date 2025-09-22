@@ -11,6 +11,7 @@ export const DB_URL = process.env.DB_URL;
 
 export const NODE_ENV = process.env.NODE_ENV;
 
+export const MQTT_URL = process.env.MQTT_URL || "mqtt://31.97.139.172:1883";
 
 export const DO_SPACES_KEY = process.env.DO_SPACES_KEY;
 export const DO_SPACES_SECRET = process.env.DO_SPACES_SECRET;
